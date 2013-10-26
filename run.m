@@ -123,7 +123,7 @@ axes(handles.axes2)
 % g=I(:,:,2);
 % b=I(:,:,3); 
 
-ventanaD(IE,100,200,100,100)
+[x,y]=ventanaD(IE,100,200,100,100)
  
 
 
@@ -136,6 +136,6 @@ IE  = ecualizacion_histograma(I,8);
 imshow(I)
 axes(handles.axes2)
  
-ventanaD(IE,50,30,50,30)
+% [x,y]=ventanaD(IE,50,30,50,30)
 
 
