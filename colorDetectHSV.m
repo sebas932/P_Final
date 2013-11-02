@@ -51,15 +51,6 @@ if (length(tol)>1)
 else
     I = I1;    
 end
-% 
-% subplot(2,2,1),imshow(RGB); title('Original Image');
-% subplot(2,2,2),imshow(I,[]); title('Detected Areas');
-%  yellowObjectsMask =  imfill(I, 'holes' );
-% subplot(2,2,3),imshow(yellowObjectsMask, []); title('Detected Areas')
-%  imshow(yellowObjectsMask, []);
-%  SE=strel('square',2);
-%  yellowObjectsMask=imerode(yellowObjectsMask,SE);
-%  subplot(2,2,4),imshow(yellowObjectsMask, []); title('Detected Areas')
 yellowObjectsMask =  imfill(I, 'holes' );
 SE=strel('square',2);
 yellowObjectsMask=imerode(yellowObjectsMask,SE); 

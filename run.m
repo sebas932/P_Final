@@ -103,6 +103,8 @@ end
 
 % --- Reconocimiento de placa.
 function pushbutton1_Callback(hObject, eventdata, handles)
+disp('=== Corriendo deteccion de placa vehicular ===')
+tic
 global p
 [I,IG,HSV,IE]= getData(handles);
 placa = imread('train/placa.jpg');
@@ -110,10 +112,11 @@ axes(handles.axes1);
 imshow(I)
 axes(handles.axes2);
 imshow(IG);
-[p,x]=ventanaD(IG,100,200,30,50,placa);
+[p]=ventanaD(IG,100,200,30,50,placa);
 axes(handles.axes3);
 imshow(p)
-
+toc
+disp('=== Finalizado ... ===')
 % --- Reconocimiento de caracter.
 function pushbutton2_Callback(hObject, eventdata, handles)
 global p
@@ -133,4 +136,4 @@ HSV =[ 0.1238    0.6099    0.6794
     0.1639    0.7900    0.9713];
 IE = colorDetectHSV(I, median(HSV), [0.06 0.3 0.5]);
 IG = uint8(IG).*uint8(IE);
-
+IG=realce(IG,150,255);

@@ -1,4 +1,4 @@
-function [p,x]= ventanaD(I,alto,ancho,landax,landay,patron)
+function [p]= ventanaD(I,alto,ancho,landax,landay,patron)
 tic
 disp('Corriendo Ventana deslizante')
 imgi =I;
@@ -6,27 +6,17 @@ tcm = alto;
 tcn = ancho;
 conta=0;
 [m,n]= size(imgi);
-x=ones(1,alto*ancho);
 i=1;
 mayor = 0;
 while i<m
     j=1;
     while j<=n
         conta= conta+1;
-        y = imgi(i:tcm,j:tcn,:); 
-%         y=im2bw(y,0.55);
-        y=realce(y,150,255);
+        y = imgi(i:tcm,j:tcn,:);  
         if(corr2(patron(:,:,1),y)>mayor)
             mayor = corr2(patron(:,:,1),y); 
             p=y;
         end 
-%       pause(0.15); 
-        if conta == 1
-            x(1,:)=reshape(y,1,[]);
-        else
-            A= reshape(y,1,[]);
-            x = [x;A];
-        end
         if tcn+landay<=n
             tcn= tcn+landay;
         else
