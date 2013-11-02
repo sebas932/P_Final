@@ -1,5 +1,5 @@
 function [img]= colorDetectHSV(RGB, hsvVal, tol)
-
+disp('Detectando Color')
 %
 % function colorDetectHSV(fileName, hsvVal, tol)
 % 

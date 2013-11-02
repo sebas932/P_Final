@@ -12,7 +12,7 @@ for i=1:m
     end
 end
 % Dividimos sobre el numero de pixeles que hay en la imagen
-pr = h./(sum(h))
+pr = h./(sum(h));
 % Ecualizamos el Histograma
 for i=1:L 
     s=sum(pr(1:i));

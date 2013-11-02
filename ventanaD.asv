@@ -1,5 +1,4 @@
 function [p,x]= ventanaD(I,alto,ancho,landax,landay,placa)
-disp('Corriendo Ventana deslizante')
 imgi =I;
 tcm = alto;
 tcn = ancho;

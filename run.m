@@ -27,11 +27,11 @@ function varargout = run(varargin)
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
-                   'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @run_OpeningFcn, ...
-                   'gui_OutputFcn',  @run_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
-                   'gui_Callback',   []);
+    'gui_Singleton',  gui_Singleton, ...
+    'gui_OpeningFcn', @run_OpeningFcn, ...
+    'gui_OutputFcn',  @run_OutputFcn, ...
+    'gui_LayoutFcn',  [] , ...
+    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
 end
@@ -54,19 +54,12 @@ function run_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for run
 handles.output = hObject;
-
 % Update handles structure
 guidata(hObject, handles);
-I = imread(get(handles.edit1,'String'));   
-IG =rgb2gray(I)
-IE  = ecualizacion_histograma(IG,8);
+[I,IG,HSV,IE]= getData(handles)
 axes(handles.axes1)
 imshow(I)
 axes(handles.axes2)
-
-HSV =[ 0.1238    0.6099    0.6794 
-    0.1639    0.7900    0.9713];
-IE  = colorDetectHSV(I, median(HSV), [0.06 0.2 0.5]); 
 imshow(IE)
 
 
@@ -75,7 +68,7 @@ imshow(IE)
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = run_OutputFcn(hObject, eventdata, handles) 
+function varargout = run_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -110,26 +103,32 @@ end
 
 % --- Reconocimiento de placa.
 function pushbutton1_Callback(hObject, eventdata, handles)
-
-I = imread(get(handles.edit1,'String'));  
-HSV =[ 0.1238    0.6099    0.6794 
-    0.1639    0.7900    0.9713];
-IE  = colorDetectHSV(I, median(HSV), [0.06 0.2 0.5]); 
-
-axes(handles.axes1);imshow(I)
-axes(handles.axes2);[x,y]=ventanaD(IE,100,200,100,100)
- 
-
+[I,IG,HSV,IE]= getData(handles)
+placa = imread('train/placa.jpg');
+axes(handles.axes1);
+imshow(I)
+axes(handles.axes2);
+imshow(IE);
+[p,x]=ventanaD(IE,100,200,50,50,placa);
+axes(handles.axes3);
+imshow(p)
 
 % --- Reconocimiento de caracter.
 function pushbutton2_Callback(hObject, eventdata, handles)
+global I ;
 axes(handles.axes1)
-I = imread(get(handles.edit1,'String')); 
-I =rgb2gray(I)
-IE  = ecualizacion_histograma(I,8);
 imshow(I)
 axes(handles.axes2)
- 
 % [x,y]=ventanaD(IE,50,30,50,30)
+
+function [I,IG,HSV,IE]= getData(handles)
+I = imread(get(handles.edit1,'String'));
+for i=1:3
+    I(:,:,i) = ecualizacion_histograma(I(:,:,i),8);
+end
+IG = rgb2gray(I);
+HSV =[ 0.1238    0.6099    0.6794
+    0.1639    0.7900    0.9713];
+IE = colorDetectHSV(I, median(HSV), [0.06 0.3 0.5]);
 
 
