@@ -58,17 +58,15 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 I = imread(get(handles.edit1,'String'));   
-I =rgb2gray(I)
-% I(:,:,1)=realce(I(:,:,1),200,200);
-% I(:,:,2)=realce(I(:,:,2),210,210);
-% I(:,:,3)=realce(I(:,:,3),0,0);
-% r=I(:,:,1);
-% g=I(:,:,2);
-% b=I(:,:,3);
-IE  = ecualizacion_histograma(I,8);
+IG =rgb2gray(I)
+IE  = ecualizacion_histograma(IG,8);
 axes(handles.axes1)
 imshow(I)
 axes(handles.axes2)
+
+HSV =[ 0.1238    0.6099    0.6794 
+    0.1639    0.7900    0.9713];
+IE  = colorDetectHSV(I, median(HSV), [0.06 0.2 0.5]); 
 imshow(IE)
 
 
@@ -110,24 +108,20 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in pushbutton1.
+% --- Reconocimiento de placa.
 function pushbutton1_Callback(hObject, eventdata, handles)
 
-axes(handles.axes1)
-I = imread(get(handles.edit1,'String')); 
-I =rgb2gray(I)
-IE  = ecualizacion_histograma(I,8);
-imshow(I)
-axes(handles.axes2)
-% r=I(:,:,1);
-% g=I(:,:,2);
-% b=I(:,:,3); 
+I = imread(get(handles.edit1,'String'));  
+HSV =[ 0.1238    0.6099    0.6794 
+    0.1639    0.7900    0.9713];
+IE  = colorDetectHSV(I, median(HSV), [0.06 0.2 0.5]); 
 
-[x,y]=ventanaD(IE,100,200,100,100)
+axes(handles.axes1);imshow(I)
+axes(handles.axes2);[x,y]=ventanaD(IE,100,200,100,100)
  
 
 
-% --- Executes on button press in pushbutton2.
+% --- Reconocimiento de caracter.
 function pushbutton2_Callback(hObject, eventdata, handles)
 axes(handles.axes1)
 I = imread(get(handles.edit1,'String')); 
