@@ -1,4 +1,4 @@
-function [p,x]= ventanaD(I,alto,ancho,landax,landay,placa)
+function [p,x]= ventanaD(I,alto,ancho,landax,landay,patron)
 disp('Corriendo Ventana deslizante')
 imgi =I;
 tcm = alto;
@@ -13,9 +13,9 @@ while i<m
     while j<=n
         conta= conta+1;
         y = imgi(i:tcm,j:tcn,:); 
-        y=im2bw(y,0.3);
-        if(corr2(placa(:,:,1),y)>mayor)
-            mayor = corr2(placa(:,:,1),y); 
+        y=im2bw(y,0.65);
+        if(corr2(patron(:,:,1),y)>mayor)
+            mayor = corr2(patron(:,:,1),y); 
             p=y;
         end 
 %       pause(0.15); 

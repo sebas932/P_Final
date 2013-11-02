@@ -56,7 +56,7 @@ function run_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
-[I,IG,HSV,IE]= getData(handles)
+[I,IG,HSV,IE]= getData(handles);
 axes(handles.axes1)
 imshow(I)
 axes(handles.axes2)
@@ -103,13 +103,13 @@ end
 
 % --- Reconocimiento de placa.
 function pushbutton1_Callback(hObject, eventdata, handles)
-[I,IG,HSV,IE]= getData(handles)
+[I,IG,HSV,IE]= getData(handles);
 placa = imread('train/placa.jpg');
 axes(handles.axes1);
 imshow(I)
 axes(handles.axes2);
-imshow(IE);
-[p,x]=ventanaD(IE,100,200,50,50,placa);
+imshow(IG);
+[p,x]=ventanaD(IG,100,200,30,50,placa);
 axes(handles.axes3);
 imshow(p)
 
@@ -130,5 +130,5 @@ IG = rgb2gray(I);
 HSV =[ 0.1238    0.6099    0.6794
     0.1639    0.7900    0.9713];
 IE = colorDetectHSV(I, median(HSV), [0.06 0.3 0.5]);
-
+IG = uint8(IG).*uint8(IE);
 
