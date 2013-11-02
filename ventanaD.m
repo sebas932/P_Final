@@ -13,7 +13,8 @@ while i<m
     while j<=n
         conta= conta+1;
         y = imgi(i:tcm,j:tcn,:); 
-        y=im2bw(y,0.65);
+%         y=im2bw(y,0.55);
+        y=realce(y,150,255);
         if(corr2(patron(:,:,1),y)>mayor)
             mayor = corr2(patron(:,:,1),y); 
             p=y;

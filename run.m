@@ -60,7 +60,7 @@ guidata(hObject, handles);
 axes(handles.axes1)
 imshow(I)
 axes(handles.axes2)
-imshow(IE)
+imshow(IG)
 
 
 % UIWAIT makes run wait for user response (see UIRESUME)
@@ -103,6 +103,7 @@ end
 
 % --- Reconocimiento de placa.
 function pushbutton1_Callback(hObject, eventdata, handles)
+global p
 [I,IG,HSV,IE]= getData(handles);
 placa = imread('train/placa.jpg');
 axes(handles.axes1);
@@ -115,10 +116,11 @@ imshow(p)
 
 % --- Reconocimiento de caracter.
 function pushbutton2_Callback(hObject, eventdata, handles)
-global I ;
+global p
 axes(handles.axes1)
-imshow(I)
+% imshow(I)
 axes(handles.axes2)
+imshow(p)
 % [x,y]=ventanaD(IE,50,30,50,30)
 
 function [I,IG,HSV,IE]= getData(handles)
