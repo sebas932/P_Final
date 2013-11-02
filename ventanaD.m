@@ -1,4 +1,5 @@
 function [p,x]= ventanaD(I,alto,ancho,landax,landay,patron)
+tic
 disp('Corriendo Ventana deslizante')
 imgi =I;
 tcm = alto;
@@ -42,3 +43,4 @@ while i<m
     end
     i=i+landax;
 end
+toc
