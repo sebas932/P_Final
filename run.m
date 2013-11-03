@@ -118,6 +118,8 @@ se=strel('square',2); % Structural element (disk of radius 1) for morphological 
 gi=imdilate(p,se); % Dilating the gray image with the structural element.
 se=strel('square',3);
 ge=imerode(gi,se);
+%p_rot = rotacion(p);
+%imshow(p);
 
 p= ait_imgneg(ge);
 p= bwareaopen(p,300);
