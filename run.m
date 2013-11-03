@@ -166,6 +166,7 @@ disp('-=======     Finalizado ...      =======-')
 
 function [I,IG,HSV,IE]= getData(handles,hObject)
 global winvid
+ 
 
 
 button_state2 = get(handles.radiobutton2, 'Value');
@@ -177,6 +178,7 @@ else
     I = imread(get(handles.edit1,'String'));
 end
 
+ 
 I =imresize(I ,[500 NaN]); % Resizing the image keeping aspect ratio same.
 for i=1:3
     I(:,:,i) = ecualizacion_histograma(I(:,:,i),8);
