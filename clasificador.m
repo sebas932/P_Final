@@ -1,4 +1,4 @@
-function [out] = clasificador(IMG)
+function [out,data] = clasificador(IMG)
 %Letter
 A=imread('train/caracteres/A.jpg');B=imread('train/caracteres/B.jpg');
 C=imread('train/caracteres/C.jpg');D=imread('train/caracteres/D.jpg');
@@ -23,17 +23,17 @@ nine=imread('train/caracteres/9.jpg'); zero=imread('train/caracteres/0.jpg');
 
 
 disp('Corriendo Clasificador')
-
+data=[];
 imgi =IMG;
 tcm = 100;
 tcn = 42;
-landay=5;
+landay=1;
 landax=100;
 conta=0;
 [m,n]= size(imgi);
 i=1;
 mayor = -1;
-patron =rgb2gray(F);
+patron =rgb2gray(T);
 
 while i<m
     j=1;
@@ -45,9 +45,9 @@ while i<m
             out=y;
             
         end 
-        imshow(y)
-%         pause(0.5)
-        corr2(patron(:,:,1),y)
+%         imshow(y)
+%         pause(0.1)
+        data=[data corr2(patron(:,:,1),y)];
         if tcn+landay<=n
             tcn= tcn+landay;
         else
@@ -64,4 +64,5 @@ while i<m
     end
     i=i+landax;
 end
+% plot(data)
 imshow(out)
