@@ -114,12 +114,14 @@ axes(handles.axes2);
 imshow(IG);
 [p]=ventanaD(IG,100,200,20,10,placa);
 axes(handles.axes3); 
-se=strel('square',2); % Structural element (disk of radius 1) for morphological processing.
-gi=imdilate(p,se); % Dilating the gray image with the structural element.
-se=strel('square',3);
-ge=imerode(gi,se);
+p= ait_imgneg(p);
+% se=strel('square',1); % Structural element (disk of radius 1) for morphological processing.
+% gi=imdilate(p,se); % Dilating the gray image with the structural element.
+% se=strel('square',1);
+% ge=imerode(gi,se);
 
-p= ait_imgneg(ge);
+
+
 p= bwareaopen(p,300);
 se=strel('square',3);
 p=imerode(p,se);
@@ -127,6 +129,7 @@ p= bwareaopen(p,100);
 p= ait_imgneg(p);
 p= bwareaopen(p,50);
 p= ait_imgneg(p);
+p = imclearborder(p);
 imshow(p)
 axes(handles.axes4);
 
