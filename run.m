@@ -112,28 +112,51 @@ axes(handles.axes1);
 imshow(I)
 axes(handles.axes2);
 imshow(IG);
-[p]=ventanaD(IG,100,200,30,50,placa);
-axes(handles.axes3);
+[p]=ventanaD(IG,100,200,20,10,placa);
+axes(handles.axes3); 
+se=strel('square',2); % Structural element (disk of radius 1) for morphological processing.
+gi=imdilate(p,se); % Dilating the gray image with the structural element.
+se=strel('square',3);
+ge=imerode(gi,se);
+
+p= ait_imgneg(ge);
+p= bwareaopen(p,300);
+se=strel('square',3);
+p=imerode(p,se);
+p= bwareaopen(p,100);
+p= ait_imgneg(p);
+p= bwareaopen(p,50);
+p= ait_imgneg(p);
 imshow(p)
+axes(handles.axes4);
+
 toc
 disp('=== Finalizado ... ===')
+
 % --- Reconocimiento de caracter.
 function pushbutton2_Callback(hObject, eventdata, handles)
 global p
-axes(handles.axes1)
-% imshow(I)
-axes(handles.axes2)
-imshow(p)
+
+
+
+axes(handles.axes4)
+size(p)
+[y] = clasificador(p);
+
+
+
+
 % [x,y]=ventanaD(IE,50,30,50,30)
 
 function [I,IG,HSV,IE]= getData(handles)
 I = imread(get(handles.edit1,'String'));
+I =imresize(I ,[600 NaN]); % Resizing the image keeping aspect ratio same.
 for i=1:3
     I(:,:,i) = ecualizacion_histograma(I(:,:,i),8);
 end
 IG = rgb2gray(I);
 HSV =[ 0.1238    0.6099    0.6794
-    0.1639    0.7900    0.9713];
-IE = colorDetectHSV(I, median(HSV), [0.06 0.3 0.5]);
+       0.1639    0.7900    0.9713];
+IE = colorDetectHSV(I, median(HSV), [0.26 0.5 0.5]);
 IG = uint8(IG).*uint8(IE);
-IG=realce(IG,150,255);
+IG=realce(IG,170,255);
