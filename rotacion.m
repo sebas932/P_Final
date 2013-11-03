@@ -22,8 +22,8 @@ while cont < m
             end
         end
     else
-        for i1 = 1:m
-            for j1 = 1:n
+        for i2 = 1:m
+            for j2 = 1:n
                 intensidad = p(i1,j1);
                 if (intensidad == punto1)
                     coord1 = [i1,j1];
