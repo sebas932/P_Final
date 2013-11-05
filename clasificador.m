@@ -33,7 +33,7 @@ conta=0;
 [m,n]= size(imgi);
 i=1;
 mayor = -1;
-patron =rgb2gray(T);
+patron =rgb2gray(P);
 
 while i<m
     j=1;
@@ -64,5 +64,5 @@ while i<m
     end
     i=i+landax;
 end
-% plot(data)
-imshow(out)
+plot(data)
+% imshow(out)

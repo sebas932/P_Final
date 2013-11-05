@@ -108,39 +108,15 @@ tic
 global p
 [I,IG,HSV,IE]= getData(handles);
 placa = imread('train/placa.jpg');
-axes(handles.axes1);
-imshow(I)
-axes(handles.axes2);
-imshow(IG);
 [p]=ventanaD(IG,100,200,20,10,placa);
-axes(handles.axes3); 
-<<<<<<< HEAD
-se=strel('square',2); % Structural element (disk of radius 1) for morphological processing.
-gi=imdilate(p,se); % Dilating the gray image with the structural element.
-se=strel('square',3);
-ge=imerode(gi,se);
-%p_rot = rotacion(p);
-%imshow(p);
-=======
-p= ait_imgneg(p);
-% se=strel('square',1); % Structural element (disk of radius 1) for morphological processing.
-% gi=imdilate(p,se); % Dilating the gray image with the structural element.
-% se=strel('square',1);
-% ge=imerode(gi,se);
 
-
->>>>>>> b16a8f613375ad23845ee49e45fa81a894c1a162
-
-p= bwareaopen(p,300);
-se=strel('square',3);
-p=imerode(p,se);
-p= bwareaopen(p,100);
-p= ait_imgneg(p);
-p= bwareaopen(p,50);
-p= ait_imgneg(p);
-p = imclearborder(p);
+axes(handles.axes1);imshow(I) 
+axes(handles.axes2);imshow(IG)
+axes(handles.axes3);  
+se=strel('square',1); 
+p=imdilate(p,se);
 imshow(p)
-axes(handles.axes4);
+
 
 toc
 disp('=== Finalizado ... ===')
@@ -153,7 +129,21 @@ global p
 
 axes(handles.axes4)
 size(p)
-[y] = clasificador(p);
+p= ait_imgneg(p);
+se=strel('disk',1); 
+p=imerode(p,se);
+p= bwareaopen(p,20);
+p = imclearborder(p); 
+p= bwareaopen(p,100); 
+se=strel('square',1); 
+p=imerode(p,se);
+p= bwareaopen(p,100);
+p=imdilate(p,se);
+[p re]=lines(p);
+imshow(p)
+
+
+% [y] = clasificador(p);
 
 
 
@@ -162,13 +152,27 @@ size(p)
 
 function [I,IG,HSV,IE]= getData(handles)
 I = imread(get(handles.edit1,'String'));
-I =imresize(I ,[600 NaN]); % Resizing the image keeping aspect ratio same.
+I =imresize(I ,[500 NaN]); % Resizing the image keeping aspect ratio same.
 for i=1:3
     I(:,:,i) = ecualizacion_histograma(I(:,:,i),8);
 end
-IG = rgb2gray(I);
-HSV =[ 0.1238    0.6099    0.6794
-       0.1639    0.7900    0.9713];
-IE = colorDetectHSV(I, median(HSV), [0.26 0.5 0.5]);
-IG = uint8(IG).*uint8(IE);
-IG=realce(IG,170,255);
+HSV =[ 0.1269    0.9226    0.8045
+    0.1522    0.7330    0.9741
+    0.1336    0.9364    0.5206
+    0.1333    0.9741    0.6984
+    0.1592    0.6452    0.9472
+    0.1635    0.7106    0.9727
+    0.2040    0.1259    0.9806
+    0.1677    0.8785    0.9440];
+IE = colorDetectHSV(I, median(HSV), [0.16 0.8 0.5]);
+% for i=1:3
+%     I(:,:,i) =uint8(I(:,:,i)).*uint8(IE);
+% end
+size(IE)
+ 
+IG=rgb2gray(I);
+ID= edge(IG,'sobel');
+ID= ait_imgneg(ID);
+% IG = ecualizacion_histograma(IG,8);
+IG=uint8(IG).*uint8(ID).*uint8(IE);
+IG=realce(IG,175,255);
