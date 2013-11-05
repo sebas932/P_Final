@@ -129,14 +129,14 @@ global p
 
 axes(handles.axes4)
 size(p)
-p= ait_imgneg(p);
+p= ait_imgneg(p); % Aplicamos negativo a la imagen
 se=strel('disk',1); 
-p=imerode(p,se);
-p= bwareaopen(p,20);
-p = imclearborder(p); 
-p= bwareaopen(p,100); 
+p=imerode(p,se);   % Erosionamos la imagen
+p= bwareaopen(p,20); % Eliminamos los elementos pequeños con intensidad alta(255)
+p = imclearborder(p); % Eliminamos el borde de la imagen con intensidad alta(255)
+p= bwareaopen(p,100); % Eliminamos elemantos medianos
 se=strel('square',1); 
-p=imerode(p,se);
+p=imerode(p,se); % Erosionamos la imagen
 p= bwareaopen(p,100);
 p=imdilate(p,se);
 [p re]=lines(p);
@@ -152,7 +152,7 @@ imshow(p)
 
 function [I,IG,HSV,IE]= getData(handles)
 I = imread(get(handles.edit1,'String'));
-I =imresize(I ,[480 NaN]); % Resizing the image keeping aspect ratio same.
+I =imresize(I ,[500 NaN]); % Resizing the image keeping aspect ratio same.
 for i=1:3
     I(:,:,i) = ecualizacion_histograma(I(:,:,i),8);
 end
@@ -171,8 +171,8 @@ IE = colorDetectHSV(I, median(HSV), [0.16 0.8 0.5]);
 size(IE)
  
 IG=rgb2gray(I);
-% ID= edge(IG,'sobel');
-% ID= ait_imgneg(ID);
+ID= edge(IG,'sobel');
+ID= ait_imgneg(ID);
 % IG = ecualizacion_histograma(IG,8);
-IG=uint8(IG).*uint8(IE);
+IG=uint8(IG).*uint8(ID).*uint8(IE);
 IG=realce(IG,175,255);

@@ -129,17 +129,17 @@ global p
 
 axes(handles.axes4)
 size(p)
-p= ait_imgneg(p);
+p= ait_imgneg(p); % Aplicamos negativo a la imagen
 se=strel('disk',1); 
-p=imerode(p,se);
-p= bwareaopen(p,20);
-p = imclearborder(p); 
-p= bwareaopen(p,100); 
+p=imerode(p,se);   % Erosionamos la imagen
+p= bwareaopen(p,20); % Eliminamos los elementos pequeños con intensidad alta(255)
+p = imclearborder(p); % Eliminamos el borde de la imagen con intensidad alta(255)
+p= bwareaopen(p,100); % Eliminamos elemantos medianos
 se=strel('square',1); 
-p=imerode(p,se);
-p= bwareaopen(p,100);
-p=imdilate(p,se);
-[p re]=lines(p);
+p=imerode(p,se); % Erosionamos la imagen
+p= bwareaopen(p,100); % Eliminamos elemantos medianos
+p=imdilate(p,se); % Dilatamos la imagen
+[p re]=lines(p); % Cortamos la imagen
 imshow(p)
 
 
