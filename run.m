@@ -125,8 +125,6 @@ disp('=== Finalizado ... ===')
 function pushbutton2_Callback(hObject, eventdata, handles)
 global p
 
-
-
 axes(handles.axes4)
 size(p)
 p= ait_imgneg(p); % Aplicamos negativo a la imagen
@@ -144,10 +142,6 @@ imshow(p)
 
 
 % [y] = clasificador(p);
-
-
-
-
 % [x,y]=ventanaD(IE,50,30,50,30)
 
 function [I,IG,HSV,IE]= getData(handles)
@@ -165,14 +159,15 @@ HSV =[ 0.1269    0.9226    0.8045
     0.2040    0.1259    0.9806
     0.1677    0.8785    0.9440];
 IE = colorDetectHSV(I, median(HSV), [0.16 0.8 0.5]);
-% for i=1:3
-%     I(:,:,i) =uint8(I(:,:,i)).*uint8(IE);
-% end
 size(IE)
  
 IG=rgb2gray(I);
-ID= edge(IG,'sobel');
-ID= ait_imgneg(ID);
-% IG = ecualizacion_histograma(IG,8);
-IG=uint8(IG).*uint8(ID).*uint8(IE);
-IG=realce(IG,175,255);
+
+B= edge(IG,'sobel');
+se=strel('square',3); 
+IG2=imdilate(B,se); % Dilatamos la imagen
+IG2= imfill(IG2,'holes');
+
+ID= ait_imgneg(B);
+IG=uint8(IG).*uint8(ID).*uint8(IE).*uint8(IG2);
+ IG=realce(IG,175,255);

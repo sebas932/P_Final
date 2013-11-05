@@ -137,9 +137,9 @@ p = imclearborder(p); % Eliminamos el borde de la imagen con intensidad alta(255
 p= bwareaopen(p,100); % Eliminamos elemantos medianos
 se=strel('square',1); 
 p=imerode(p,se); % Erosionamos la imagen
-p= bwareaopen(p,100);
-p=imdilate(p,se);
-[p re]=lines(p);
+p= bwareaopen(p,100); % Eliminamos elemantos medianos
+p=imdilate(p,se); % Dilatamos la imagen
+[p re]=lines(p); % Cortamos la imagen
 imshow(p)
 
 
@@ -171,8 +171,15 @@ IE = colorDetectHSV(I, median(HSV), [0.16 0.8 0.5]);
 size(IE)
  
 IG=rgb2gray(I);
+
+B= edge(IG,'sobel');
+se=strel('square',3); 
+IG2=imdilate(B,se); % Dilatamos la imagen
+IG2= imfill(IG2,'holes');
+
+
 ID= edge(IG,'sobel');
 ID= ait_imgneg(ID);
 % IG = ecualizacion_histograma(IG,8);
-IG=uint8(IG).*uint8(ID).*uint8(IE);
-IG=realce(IG,175,255);
+ IG=uint8(IG).*uint8(ID).*uint8(IE).*uint8(IG2);
+%  IG=realce(IG,175,255);
