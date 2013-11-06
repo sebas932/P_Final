@@ -152,19 +152,15 @@ for i=1:3
 end
 HSV =[ 0.1269    0.9226    0.8045
     0.1522    0.7330    0.9741
-    0.1336    0.9364    0.5206
-    0.1333    0.9741    0.6984
-    0.1592    0.6452    0.9472
-    0.1635    0.7106    0.9727
     0.2040    0.1259    0.9806
     0.1677    0.8785    0.9440];
-IE = colorDetectHSV(I, median(HSV), [0.16 0.8 0.5]);
+IE = colorDetectHSV(I, median(HSV), [0.55 0.6 0.6]);
 size(IE)
  
 IG=rgb2gray(I);
 
 B= edge(IG,'sobel');
-se=strel('square',3); 
+se=strel('disk',4); 
 IG2=imdilate(B,se); % Dilatamos la imagen
 IG2= imfill(IG2,'holes');
 
