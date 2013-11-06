@@ -108,28 +108,22 @@ tic
 global p
 [I,IG,HSV,IE]= getData(handles);
 placa = imread('train/placa.jpg');
-[p]=ventanaD(IG,100,200,20,10,placa);
+[i]=ventanaD(IG,100,200,20,10,placa);
 
 axes(handles.axes1);imshow(I) 
 axes(handles.axes2);imshow(IG)
-axes(handles.axes3);  
-se=strel('square',1); 
-p=imdilate(p,se);
+axes(handles.axes3); 
+
+p= I(i(1):i(2),i(3):i(4),:);
+p=rgb2gray(p);
+p=realce(p,170,255);
 imshow(p)
-
-
-toc
-disp('=== Finalizado ... ===')
-
-% --- Reconocimiento de caracter.
-function pushbutton2_Callback(hObject, eventdata, handles)
-global p
 
 axes(handles.axes4)
 size(p)
 p= ait_imgneg(p); % Aplicamos negativo a la imagen
-se=strel('disk',1); 
-p=imerode(p,se);   % Erosionamos la imagen
+se=strel('square',2); 
+p=imerode(p,se);   % Erosionamos la imagen  
 p= bwareaopen(p,20); % Eliminamos los elementos pequeños con intensidad alta(255)
 p = imclearborder(p); % Eliminamos el borde de la imagen con intensidad alta(255)
 p= bwareaopen(p,100); % Eliminamos elemantos medianos
@@ -138,11 +132,31 @@ p=imerode(p,se); % Erosionamos la imagen
 p= bwareaopen(p,100); % Eliminamos elemantos medianos
 p=imdilate(p,se); % Dilatamos la imagen
 [p re]=lines(p); % Cortamos la imagen
+word = [];
+load templates 
+global templates
+[L Ne] = bwlabel(p); 
+ for n=1:Ne
+        [r,c] = find(L==n);
+        n1=p(min(r):max(r),min(c):max(c));  
+        % Resize letter (same size of template)
+        img_r=imresize(n1,[100 42]);
+        
+        imshow(img_r)
+        pause(0.2)
+        
+        letter=clasificador(img_r,36);
+        % Letter concatenation
+        word=[word letter];
+    end
 imshow(p)
+word
 
 
-% [y] = clasificador(p);
-% [x,y]=ventanaD(IE,50,30,50,30)
+toc
+disp('=== Finalizado ... ===')
+
+
 
 function [I,IG,HSV,IE]= getData(handles)
 I = imread(get(handles.edit1,'String'));
@@ -150,20 +164,24 @@ I =imresize(I ,[500 NaN]); % Resizing the image keeping aspect ratio same.
 for i=1:3
     I(:,:,i) = ecualizacion_histograma(I(:,:,i),8);
 end
-HSV =[ 0.1269    0.9226    0.8045
-    0.1522    0.7330    0.9741
-    0.2040    0.1259    0.9806
-    0.1677    0.8785    0.9440];
-IE = colorDetectHSV(I, median(HSV), [0.55 0.6 0.6]);
+HSV =[   0.1563    0.9890    0.9481
+    0.1570    0.9909    0.9345
+    0.1409    0.9942    0.9439
+    0.1263    0.3452    0.7327
+    0.0918    0.3229    0.8530
+    0.1326    0.7155    0.7471
+    0.0806    0.4227    0.6282
+    0.1330    0.6350    0.8055];
+IE = colorDetectHSV(I, median(HSV), [0.35 0.6 0.6]);
 size(IE)
  
 IG=rgb2gray(I);
 
-B= edge(IG,'sobel');
+B= edge(IG,'sobel'); % Aplicamos SOBEL para ver los bordes de la imagen
 se=strel('disk',4); 
 IG2=imdilate(B,se); % Dilatamos la imagen
-IG2= imfill(IG2,'holes');
+IG2= imfill(IG2,'holes'); % Rellenamos todos los huecos para asi tener la parte de la placa
 
 ID= ait_imgneg(B);
-IG=uint8(IG).*uint8(ID).*uint8(IE).*uint8(IG2);
- IG=realce(IG,175,255);
+IG=uint8(IG).*uint8(IE).*uint8(IG2);
+IG=realce(IG,170,255);

@@ -22,7 +22,6 @@ nine=imread('train/caracteres/9.jpg'); zero=imread('train/caracteres/0.jpg');
 
 letter=[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z];
 number=[one two three four five six seven eight nine zero];
-character=[im2bw(rgb2gray(letter),0.5) im2bw(rgb2gray(number),0.5)];
+character=[im2bw(letter,0.5) im2bw(number,0.5)];
 templates=mat2cell(character,100,[42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42]);
 save ('templates','templates')
-% clear all

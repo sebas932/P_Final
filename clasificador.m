@@ -1,68 +1,90 @@
-function [out,data] = clasificador(IMG)
-%Letter
-A=imread('train/caracteres/A.jpg');B=imread('train/caracteres/B.jpg');
-C=imread('train/caracteres/C.jpg');D=imread('train/caracteres/D.jpg');
-E=imread('train/caracteres/E.jpg');F=imread('train/caracteres/F.jpg');
-G=imread('train/caracteres/G.jpg');H=imread('train/caracteres/H.jpg');
-I=imread('train/caracteres/I.jpg');J=imread('train/caracteres/J.jpg');
-K=imread('train/caracteres/K.jpg');L=imread('train/caracteres/L.jpg');
-M=imread('train/caracteres/M.jpg');N=imread('train/caracteres/N.jpg');
-O=imread('train/caracteres/O.jpg');P=imread('train/caracteres/P.jpg');
-Q=imread('train/caracteres/Q.jpg');R=imread('train/caracteres/R.jpg');
-S=imread('train/caracteres/S.jpg');T=imread('train/caracteres/T.jpg');
-U=imread('train/caracteres/U.jpg');V=imread('train/caracteres/V.jpg');
-W=imread('train/caracteres/W.jpg');X=imread('train/caracteres/X.jpg');
-Y=imread('train/caracteres/Y.jpg');Z=imread('train/caracteres/Z.jpg');
-
-%Number
-one=imread('train/caracteres/1.jpg');  two=imread('train/caracteres/2.jpg');
-three=imread('train/caracteres/3.jpg');four=imread('train/caracteres/4.jpg');
-five=imread('train/caracteres/5.jpg'); six=imread('train/caracteres/6.jpg');
-seven=imread('train/caracteres/7.jpg');eight=imread('train/caracteres/8.jpg');
-nine=imread('train/caracteres/9.jpg'); zero=imread('train/caracteres/0.jpg');
-
-
-disp('Corriendo Clasificador')
-data=[];
-imgi =IMG;
-tcm = 100;
-tcn = 42;
-landay=1;
-landax=100;
-conta=0;
-[m,n]= size(imgi);
-i=1;
-mayor = -1;
-patron =rgb2gray(P);
-
-while i<m
-    j=1;
-    while j<=n
-        conta= conta+1;
-        y = imgi(i:tcm,j:tcn,:);  
-        if(corr2(patron,y)>mayor)
-            mayor = corr2(patron(:,:,1),y);
-            out=y;
-            
-        end 
-%         imshow(y)
-%         pause(0.1)
-        data=[data corr2(patron(:,:,1),y)];
-        if tcn+landay<=n
-            tcn= tcn+landay;
-        else
-            j=n;
-            tcn=42;
-        end
-        j=j+landay;
-    end
-    if tcm+landax<=m
-        tcm= tcm+landax;
-    else
-        i=m;
-        tcm=100;
-    end
-    i=i+landax;
+function letter=clasificador(imagn,num_letras)
+% Computes the correlation between template and input image
+% and its output is a string containing the letter.
+% Size of 'imagn' must be 42 x 24 pixels
+% Example:
+% imagn=imread('D.bmp');
+% letter=read_letter(imagn)
+global templates
+comp=[ ];
+for n=1:num_letras
+    sem=corr2(templates{1,n},imagn);
+    comp=[comp sem];
 end
-plot(data)
-% imshow(out)
+vd=find(comp==max(comp));
+%*-*-*-*-*-*-*-*-*-*-*-*-*-
+if vd==1
+    letter='A';
+elseif vd==2
+    letter='B';
+elseif vd==3
+    letter='C';
+elseif vd==4
+    letter='D';
+elseif vd==5
+    letter='E';
+elseif vd==6
+    letter='F';
+elseif vd==7
+    letter='G';
+elseif vd==8
+    letter='H';
+elseif vd==9
+    letter='I';
+elseif vd==10
+    letter='J';
+elseif vd==11
+    letter='K';
+elseif vd==12
+    letter='L';
+elseif vd==13
+    letter='M';
+elseif vd==14
+    letter='N';
+elseif vd==15
+    letter='O';
+elseif vd==16
+    letter='P';
+elseif vd==17
+    letter='Q';
+elseif vd==18
+    letter='R';
+elseif vd==19
+    letter='S';
+elseif vd==20
+    letter='T';
+elseif vd==21
+    letter='U';
+elseif vd==22
+    letter='V';
+elseif vd==23
+    letter='W';
+elseif vd==24
+    letter='X';
+elseif vd==25
+    letter='Y';
+elseif vd==26
+    letter='Z';
+    %*-*-*-*-*
+elseif vd==27
+    letter='1';
+elseif vd==28
+    letter='2';
+elseif vd==29
+    letter='3';
+elseif vd==30
+    letter='4';
+elseif vd==31
+    letter='5';
+elseif vd==32
+    letter='6';
+elseif vd==33
+    letter='7';
+elseif vd==34
+    letter='8';
+elseif vd==35
+    letter='9';
+else
+    letter='0';
+end
+

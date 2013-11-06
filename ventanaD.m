@@ -15,7 +15,7 @@ while i<m
         y = imgi(i:tcm,j:tcn,:);  
         if(corr2(patron(:,:,1),y)>mayor)
             mayor = corr2(patron(:,:,1),y); 
-            p=y;
+            p=[i tcm j tcn];
         end 
         if tcn+landay<=n
             tcn= tcn+landay;
