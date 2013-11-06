@@ -114,9 +114,9 @@ axes(handles.axes1);imshow(I)
 axes(handles.axes2);imshow(IG)
 axes(handles.axes3); 
 
-p= I(i(1):i(2),i(3):i(4),:);
-p=rgb2gray(p);
-p=realce(p,170,255);
+p= IG(i(1):i(2),i(3):i(4),:);
+
+
 imshow(p)
 
 axes(handles.axes4)
