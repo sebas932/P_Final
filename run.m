@@ -53,14 +53,19 @@ function run_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to run (see VARARGIN)
 
 % Choose default command line output for run
+global winvid
 handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
-[I,IG,HSV,IE]= getData(handles);
+winvid = videoinput('winvideo',1,'YUY2_640x480');
+preview(winvid);
+[I,IG,HSV,IE]= getData(handles,hObject);
 axes(handles.axes1)
 imshow(I)
 axes(handles.axes2)
 imshow(IG)
+
+
 
 
 % UIWAIT makes run wait for user response (see UIRESUME)
@@ -106,7 +111,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 disp('-======= Corriendo deteccion de placa vehicular =======-')
 tic
 global p
-[I,IG,HSV,IE]= getData(handles);
+[I,IG,HSV,IE]= getData(handles,hObject);
 placa = imread('train/placa.jpg');
 [i]=ventanaD(IG,100,200,20,10,placa);
 
@@ -159,8 +164,10 @@ disp('-=======     Finalizado ...      =======-')
 
 
 
-function [I,IG,HSV,IE]= getData(handles)
-I = imread(get(handles.edit1,'String'));
+function [I,IG,HSV,IE]= getData(handles,hObject)
+global winvid
+I= getsnapshot(winvid);
+% I = imread(get(handles.edit1,'String'));
 I =imresize(I ,[500 NaN]); % Resizing the image keeping aspect ratio same.
 for i=1:3
     I(:,:,i) = ecualizacion_histograma(I(:,:,i),8);
