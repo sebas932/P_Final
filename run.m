@@ -167,7 +167,7 @@ disp('-=======     Finalizado ...      =======-')
 function [I,IG,HSV,IE]= getData(handles,hObject)
 global winvid
 I= getsnapshot(winvid);
-% I = imread(get(handles.edit1,'String'));
+%I = imread(get(handles.edit1,'String'));
 I =imresize(I ,[500 NaN]); % Resizing the image keeping aspect ratio same.
 for i=1:3
     I(:,:,i) = ecualizacion_histograma(I(:,:,i),8);
