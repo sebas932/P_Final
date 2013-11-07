@@ -224,3 +224,6 @@ pip-log.txt
 
 # OSX / *nix default autosave extension
 *.m~
+
+
+web_files/config.php
