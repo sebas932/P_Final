@@ -22,7 +22,7 @@ function varargout = run(varargin)
 %asdasddasdasd
 % Edit the above text to modify the response to help run
 
-% Last Modified by GUIDE v2.5 25-Sep-2013 19:56:12
+% Last Modified by GUIDE v2.5 06-Nov-2013 21:21:46
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -103,58 +103,59 @@ end
 
 % --- Reconocimiento de placa.
 function pushbutton1_Callback(hObject, eventdata, handles)
-disp('=== Corriendo deteccion de placa vehicular ===')
+disp('-======= Corriendo deteccion de placa vehicular =======-')
 tic
 global p
 [I,IG,HSV,IE]= getData(handles);
 placa = imread('train/placa.jpg');
 [i]=ventanaD(IG,100,200,20,10,placa);
 
-axes(handles.axes1);imshow(I) 
+axes(handles.axes1);imshow(I)
 axes(handles.axes2);imshow(IG)
-axes(handles.axes3); 
-
+axes(handles.axes3);
 p= IG(i(1):i(2),i(3):i(4),:);
-
-
 imshow(p)
 
 axes(handles.axes4)
 size(p)
 p= ait_imgneg(p); % Aplicamos negativo a la imagen
-se=strel('square',2); 
-p=imerode(p,se);   % Erosionamos la imagen  
+se=strel('square',2);
+p=imerode(p,se);   % Erosionamos la imagen
 p= bwareaopen(p,20); % Eliminamos los elementos pequeños con intensidad alta(255)
 p = imclearborder(p); % Eliminamos el borde de la imagen con intensidad alta(255)
 p= bwareaopen(p,100); % Eliminamos elemantos medianos
-se=strel('square',1); 
+se=strel('square',1);
 p=imerode(p,se); % Erosionamos la imagen
 p= bwareaopen(p,100); % Eliminamos elemantos medianos
 p=imdilate(p,se); % Dilatamos la imagen
 [p re]=lines(p); % Cortamos la imagen
-word = [];
-load templates 
+placa = [];
+load templates
 global templates
-[L Ne] = bwlabel(p); 
- for n=1:Ne
-        [r,c] = find(L==n);
-        n1=p(min(r):max(r),min(c):max(c));  
-        % Resize letter (same size of template)
-        img_r=imresize(n1,[100 42]);
-        
-        imshow(img_r)
-        pause(0.2)
-        
-        letter=clasificador(img_r,36);
-        % Letter concatenation
-        word=[word letter];
-    end
+[L Ne] = bwlabel(p);
+for n=1:Ne
+    [r,c] = find(L==n);
+    n1=p(min(r):max(r),min(c):max(c));
+    img_r=imresize(n1,[100 42]);
+    imshow(img_r);
+    caracter=clasificador(img_r,36);
+    placa=[placa caracter];
+end
 imshow(p)
-word
+set(handles.text1,'String',placa)
 
+button_state = get(handles.radiobutton1, 'Value');
+
+if button_state
+    URL = 'http://guybrush.info/web_files/';
+    str = urlread(URL,'Get',{'placa',placa});
+    set(handles.text2,'String','web "http://guybrush.info/web_files/"') 
+else
+    set(handles.text2,'String','') 
+end
 
 toc
-disp('=== Finalizado ... ===')
+disp('-=======     Finalizado ...      =======-')
 
 
 
@@ -174,14 +175,31 @@ HSV =[   0.1563    0.9890    0.9481
     0.1330    0.6350    0.8055];
 IE = colorDetectHSV(I, median(HSV), [0.35 0.6 0.6]);
 size(IE)
- 
+
 IG=rgb2gray(I);
 
 B= edge(IG,'sobel'); % Aplicamos SOBEL para ver los bordes de la imagen
-se=strel('disk',4); 
+se=strel('disk',4);
 IG2=imdilate(B,se); % Dilatamos la imagen
 IG2= imfill(IG2,'holes'); % Rellenamos todos los huecos para asi tener la parte de la placa
 
 ID= ait_imgneg(B);
 IG=uint8(IG).*uint8(IE).*uint8(IG2);
 IG=realce(IG,170,255);
+
+
+
+% --- Executes on button press in radiobutton1.
+function radiobutton1_Callback(hObject, eventdata, handles)
+% hObject    handle to radiobutton1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radiobutton1
+
+
+% --- Executes on button press in pushbutton3.
+function pushbutton3_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
