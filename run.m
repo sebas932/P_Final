@@ -167,6 +167,7 @@ disp('-=======     Finalizado ...      =======-')
 function [I,IG,HSV,IE]= getData(handles,hObject)
 global winvid
 I= getsnapshot(winvid);
+I = YUY2toRGB(I);
 % I = imread(get(handles.edit1,'String'));
 I =imresize(I ,[500 NaN]); % Resizing the image keeping aspect ratio same.
 for i=1:3
@@ -194,6 +195,26 @@ ID= ait_imgneg(B);
 IG=uint8(IG).*uint8(IE).*uint8(IG2);
 IG=realce(IG,170,255);
 
+function newdata = YUY2toRGB(data)
+
+
+
+Y = single(data(:,:,1));
+U = single(data(:,:,2));
+V = single(data(:,:,3));
+
+C = Y-16;
+D = U - 128;
+E = V - 128;
+
+R = uint8((298*C+409*E+128)/256);
+G = uint8((298*C-100*D-208*E+128)/256);
+B = uint8((298*C+516*D+128)/256);
+
+newdata = uint8(zeros(size(data)));
+newdata(:,:,1)=R;
+newdata(:,:,2)=G;
+newdata(:,:,3)=B;
 
 
 % --- Executes on button press in radiobutton1.
