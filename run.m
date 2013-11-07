@@ -22,7 +22,7 @@ function varargout = run(varargin)
 %asdasddasdasd
 % Edit the above text to modify the response to help run
 
-% Last Modified by GUIDE v2.5 06-Nov-2013 21:21:46
+% Last Modified by GUIDE v2.5 06-Nov-2013 23:29:25
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -166,9 +166,17 @@ disp('-=======     Finalizado ...      =======-')
 
 function [I,IG,HSV,IE]= getData(handles,hObject)
 global winvid
-I= getsnapshot(winvid);
+
+
+button_state2 = get(handles.radiobutton2, 'Value');
+
+if button_state2
+     I= getsnapshot(winvid);
 I = YUY2toRGB(I);
-% I = imread(get(handles.edit1,'String'));
+else
+    I = imread(get(handles.edit1,'String'));
+end
+
 I =imresize(I ,[500 NaN]); % Resizing the image keeping aspect ratio same.
 for i=1:3
     I(:,:,i) = ecualizacion_histograma(I(:,:,i),8);
@@ -231,3 +239,12 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in radiobutton2.
+function radiobutton2_Callback(hObject, eventdata, handles)
+% hObject    handle to radiobutton2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radiobutton2
