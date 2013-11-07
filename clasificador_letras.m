@@ -1,4 +1,4 @@
-function letter=clasificador(imagn,num_letras)
+function letter=clasificador_letras(imagn,num_letras)
 % Computes the correlation between template and input image
 % and its output is a string containing the letter.
 % Size of 'imagn' must be 42 x 24 pixels
