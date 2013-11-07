@@ -57,8 +57,8 @@ global winvid
 handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
-winvid = videoinput('winvideo',1,'YUY2_640x480');
-preview(winvid);
+%winvid = videoinput('winvideo',1,'YUY2_640x480');
+%preview(winvid);
 [I,IG,HSV,IE]= getData(handles,hObject);
 axes(handles.axes1)
 imshow(I)
@@ -169,7 +169,7 @@ global winvid
 button_state2 = get(handles.radiobutton2, 'Value');
 
 if button_state2
-     I= getsnapshot(winvid);
+     %I= getsnapshot(winvid);
 I = YUY2toRGB(I);
 else
     I = imread(get(handles.edit1,'String'));
