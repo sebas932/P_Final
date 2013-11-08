@@ -57,8 +57,8 @@ global winvid
 handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
-%winvid = videoinput('winvideo',1,'YUY2_640x480');
-%preview(winvid);
+winvid = videoinput('winvideo',1,'YUY2_640x480');
+preview(winvid);
 [I,IG,HSV,IE]= getData(handles,hObject);
 axes(handles.axes1)
 imshow(I)
@@ -132,7 +132,7 @@ p= bwareaopen(p,20); % Eliminamos los elementos pequeños con intensidad alta(255
 p = imclearborder(p); % Eliminamos el borde de la imagen con intensidad alta(255)
 
 
-se=strel('square',3);
+se=strel('square',2);
 p=imerode(p,se); % Erosionamos imagen
 p=imdilate(p,se); % Dilatamos la imagen
 
@@ -143,7 +143,7 @@ p= bwareaopen(p,170); % Eliminamos elemantos medianos
 p=imdilate(p,se); % Dilatamos la imagen
 placa = [];
 
-imshow(p)
+
 
 load templates
 global templates
@@ -152,7 +152,8 @@ for n=1:Ne
     [r,c] = find(L==n);
     n1=p(min(r):max(r),min(c):max(c));
     img_r=imresize(n1,[100 42]);
-    %     imshow(img_r);
+    imshow(img_r);
+    pause(1)
     if n <= 3
         caracter=clasificador_letras(img_r,26);
     else
@@ -171,7 +172,7 @@ if button_state
 else
     set(handles.text2,'String','')
 end
-
+imshow(p)
 toc
 disp('-=======     Finalizado ...      =======-')
 
@@ -205,14 +206,13 @@ size(IE)
 IG=rgb2gray(I);
 
 B= edge(IG,'sobel'); % Aplicamos SOBEL para ver los bordes de la imagen
-se=strel('square',9);
+se=strel('square',8);
 IG2=imdilate(B,se); % Dilatamos la imagen
 IG2= imfill(IG2,'holes'); % Rellenamos todos los huecos para asi tener la parte de la placa
 
 ID= ait_imgneg(B);
 IG=uint8(IG).*uint8(IG2).*uint8(IE);
 IG=realce(IG,130,255);
-
 
 
 
