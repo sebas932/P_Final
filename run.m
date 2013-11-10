@@ -22,7 +22,7 @@ function varargout = run(varargin)
 %asdasddasdasd
 % Edit the above text to modify the response to help run
 
-% Last Modified by GUIDE v2.5 06-Nov-2013 23:29:25
+% Last Modified by GUIDE v2.5 09-Nov-2013 12:15:20
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -57,8 +57,8 @@ global winvid
 handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
-winvid = videoinput('winvideo',1,'YUY2_640x480');
-preview(winvid);
+% winvid = videoinput('winvideo',1,'YUY2_640x480');
+% preview(winvid);
 [I,IG,HSV,IE]= getData(handles,hObject);
 axes(handles.axes1)
 imshow(I)
@@ -113,47 +113,47 @@ tic
 global p
 [I,IG,HSV,IE]= getData(handles,hObject);
 placa = imread('train/placa.jpg');
-[i]=ventanaD(IG,100,200,20,10,placa);
+[i]=ventanaD(IG,175,350,100,100,placa);
 
 axes(handles.axes1);imshow(I)
 axes(handles.axes2);imshow(IG)
 axes(handles.axes3);
-p= IG(i(1):i(2),i(3):i(4),:);
+p= IG(i(1):i(2),i(3):i(4),:); % Mascara cortada 
+[p re]=lines(p); % Cortamos la imagen 
+p =imresize(p ,[100 200]); % Resizing the image keeping aspect ratio same.
 imshow(p)
 
 axes(handles.axes4)
-size(p)
+
 p= ait_imgneg(p); % Aplicamos negativo a la imagen
-se=strel('square',2);
+se=strel('square',4);
 p=imerode(p,se);   % Erosionamos la imagen
+se=strel('square',3);
+p=imdilate(p,se); % Dilatamos la imagen
+p= bwareaopen(p,200); % Eliminamos los elementos pequeños con intensidad alta(255)
 
-p= bwareaopen(p,20); % Eliminamos los elementos pequeños con intensidad alta(255)
-
+imshow(p)
 p = imclearborder(p); % Eliminamos el borde de la imagen con intensidad alta(255)
 
-
 se=strel('square',2);
-p=imerode(p,se); % Erosionamos imagen
-p=imdilate(p,se); % Dilatamos la imagen
-
-p= bwareaopen(p,170); % Eliminamos elemantos medianos
-
-
+% p=imerode(p,se); % Erosionamos imagen
+% p=imdilate(p,se); % Dilatamos la imagen
+% p= bwareaopen(p,170); % Eliminamos elemantos medianos
 [p re]=lines(p); % Cortamos la imagen
-p=imdilate(p,se); % Dilatamos la imagen
+% p=imdilate(p,se); % Dilatamos la imagen
 placa = [];
+imshow(p)
 
-
-
-load templates
 global templates
+load templates
+
 [L Ne] = bwlabel(p);
 for n=1:Ne
     [r,c] = find(L==n);
     n1=p(min(r):max(r),min(c):max(c));
     img_r=imresize(n1,[100 42]);
-    imshow(img_r);
-    pause(1)
+%     imshow(img_r);
+%     pause(1)
     if n <= 3
         caracter=clasificador_letras(img_r,26);
     else
@@ -172,7 +172,8 @@ if button_state
 else
     set(handles.text2,'String','')
 end
-imshow(p)
+
+
 toc
 disp('-=======     Finalizado ...      =======-')
 
@@ -192,27 +193,32 @@ else
     I = imread(get(handles.edit1,'String'));
 end
 
-I =imresize(I ,[640 NaN]); % Resizing the image keeping aspect ratio same.
+I =imresize(I ,[1500 NaN]); % Resizing the image keeping aspect ratio same.
 for i=1:3
     %     I(:,:,i) = ecualizacion_histograma(I(:,:,i),8);
 end
-HSV =[   0.1563    0.9890    0.9481
-    0.1570    0.9909    0.9345
-    0.1409    0.9942    0.9439
-    0.1330    0.6350    0.8055];
+HSV =[  0.1041    0.7794    0.5573
+        0.1394    1.0000    0.9811
+        0.1277    0.9787    0.8074
+        0.1461    1.0000    1.0000
+        0.1237    0.9550    0.6602
+        0.1138    0.9386    0.5825
+        0.1321    1.0000    0.7715];
 IE = colorDetectHSV(I, median(HSV), [0.25 0.7 0.7]);
 size(IE)
 
 IG=rgb2gray(I);
 
 B= edge(IG,'sobel'); % Aplicamos SOBEL para ver los bordes de la imagen
-se=strel('square',8);
+se=strel('square',9);
 IG2=imdilate(B,se); % Dilatamos la imagen
 IG2= imfill(IG2,'holes'); % Rellenamos todos los huecos para asi tener la parte de la placa
 
 ID= ait_imgneg(B);
 IG=uint8(IG).*uint8(IG2).*uint8(IE);
-IG=realce(IG,130,255);
+IG=realce(IG,120,255);
+
+% IG= imfill(IG,'holes');
 
 
 
@@ -257,3 +263,10 @@ function radiobutton2_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of radiobutton2
+
+
+% --------------------------------------------------------------------
+function Untitled_1_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
