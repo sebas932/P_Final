@@ -118,7 +118,7 @@ tic
 global p
 [I,IG,HSV,IE]= getData(handles,hObject);
 placa = imread('train/placa.jpg');
-[i]=ventanaD(IG,175,350,100,100,placa);
+[i]=ventanaD(IG,175,350,25,25,placa);
 axes(handles.axes1);imshow(I)
 axes(handles.axes2);imshow(IG)
 axes(handles.axes3);
@@ -214,6 +214,7 @@ IG=rgb2gray(I);
 % ID= ait_imgneg(B);
 
 IG=uint8(IG).*uint8(IE);
+% IG=uint8(IG).*uint8(IG2);
 IG=realce(IG,120,255);
 
 
