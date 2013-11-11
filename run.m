@@ -118,7 +118,7 @@ tic
 global p
 [I,IG,HSV,IE]= getData(handles,hObject);
 placa = imread('train/placa.jpg');
-[i]=ventanaD(IG,175,350,25,25,placa);
+[i]=ventanaD(IG,150,300,25,25,placa);
 axes(handles.axes1);imshow(I)
 axes(handles.axes2);imshow(IG)
 axes(handles.axes3);
@@ -191,7 +191,7 @@ else
     I = imread(get(handles.edit1,'String'));
 end
 
-I =imresize(I ,[1300 NaN]); % Resizing the image keeping aspect ratio same.
+I =imresize(I ,[640 NaN]); % Resizing the image keeping aspect ratio same.
 for i=1:3
     %     I(:,:,i) = ecualizacion_histograma(I(:,:,i),8);
 end
