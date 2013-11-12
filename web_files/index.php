@@ -5,7 +5,10 @@
 	include("header.php"); 
 	if($_GET) { 
 		 $placa	= $_GET['placa'];
-	     mysql_query("INSERT INTO ingresos (placa) values('$placa')") or die("Error en: $busqueda: " . mysql_error()); 
+		 if (strlen($placa)==6){
+		 	mysql_query("INSERT INTO ingresos (placa) values('$placa')") or die("Error en: $busqueda: " . mysql_error()); 
+		 }
+	     
          
 	exit();	
 	} 
